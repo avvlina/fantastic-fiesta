@@ -1,0 +1,134 @@
+package Test_task;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Введите выражение: ");
+        String inputFromUser = sc.nextLine().toUpperCase();
+        sc.close();
+        String result = Calculator.calc(inputFromUser);
+        System.out.print("Результат: " + result);
+    }
+}
+
+class Calculator {
+    public static String calc(String input) {
+        String exception = "throws Exception";
+        int num1 = 0, num2 = 0, arabResult;
+        String[] splitInput = input.split(" ");
+        if (splitInput.length <= 1) {
+            return exception;
+        }
+        if (splitInput.length > 3) {
+            return exception;
+        }
+
+
+        String[] romansCheck = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        boolean roman1 = false;
+        boolean roman2 = false;
+        for (String s : romansCheck) {
+            if (splitInput[0].equals(s)) {
+                switch (splitInput[0]) {
+                    case "I" -> num1 = 1;
+                    case "II" -> num1 = 2;
+                    case "III" -> num1 = 3;
+                    case "IV" -> num1 = 4;
+                    case "V" -> num1 = 5;
+                    case "VI" -> num1 = 6;
+                    case "VII" -> num1 = 7;
+                    case "VIII" -> num1 = 8;
+                    case "IX" -> num1 = 9;
+                    case "X" -> num1 = 10;
+                }
+                roman1 = true;
+            }
+
+            if (splitInput[2].equals(s)) {
+                switch (splitInput[2]) {
+                    case "I" -> num2 = 1;
+                    case "II" -> num2 = 2;
+                    case "III" -> num2 = 3;
+                    case "IV" -> num2 = 4;
+                    case "V" -> num2 = 5;
+                    case "VI" -> num2 = 6;
+                    case "VII" -> num2 = 7;
+                    case "VIII" -> num2 = 8;
+                    case "IX" -> num2 = 9;
+                    case "X" -> num2 = 10;
+                }
+                roman2 = true;
+            }
+        }
+
+        if (!(roman1 && roman2)) {
+            try {
+                num1 = Integer.parseInt(splitInput[0]);
+                num2 = Integer.parseInt(splitInput[2]);
+            } catch (Exception e) {
+                return exception;
+            }
+        }
+
+        if (num1 < 1 || num2 < 1 || num1 > 10 || num2 > 10)
+            return exception;
+
+        switch (splitInput[1]) {
+            case "+" -> arabResult = num1 + num2;
+            case "-" -> arabResult = num1 - num2;
+            case "*" -> arabResult = num1 * num2;
+            case "/" -> arabResult = num1 / num2;
+            default -> {
+                return exception;
+            }
+        }
+
+        String finalResult;
+        if (roman1 && roman2 && arabResult < 1) {
+            return exception;
+        } else if (roman1 && roman2) {
+            StringBuilder romanResult = new StringBuilder();
+            while (arabResult == 100) {
+                romanResult.append("C");
+                arabResult -= 100;
+            }
+            while (arabResult >= 90) {
+                romanResult.append("XC");
+                arabResult -= 90;
+            }
+            while (arabResult >= 50) {
+                romanResult.append("L");
+                arabResult -= 50;
+            }
+            while (arabResult >= 40) {
+                romanResult.append("XL");
+                arabResult -= 40;
+            }
+            while (arabResult >= 10) {
+                romanResult.append("X");
+                arabResult -= 10;
+            }
+            while (arabResult == 9) {
+                romanResult.append("IX");
+                arabResult -= 9;
+            }
+            while (arabResult >= 5) {
+                romanResult.append("V");
+                arabResult -= 5;
+            }
+            while (arabResult == 4) {
+                romanResult.append("IV");
+                arabResult -= 4;
+            }
+            while (arabResult >= 1) {
+                romanResult.append("I");
+                arabResult -= 1;
+            }
+            finalResult = String.valueOf(romanResult);
+        } else {
+            finalResult = String.valueOf(arabResult);
+        }
+        return finalResult;
+    }
+}
